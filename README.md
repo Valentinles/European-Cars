@@ -2,7 +2,7 @@
 **European Cars** is ASP .NET Core Blazor Server Side application for car advertisements.To create an advertisement you need to register. The advertisement itself includes the most important information about any car such as brand, model, year of production, conditon, engine type, price and so on.
 
 **Images**  </br>
-<img src="https://i.postimg.cc/NMF5KPwM/Screenshot-3.png" width="33%"></img> <img src="https://i.postimg.cc/bJ5dkHzR/Screenshot-4.png" width="33%"></img> <img src="https://i.postimg.cc/3NDNB4NQ/Screenshot-5.png" width="33%"></img>
+<img src="https://i.postimg.cc/NMF5KPwM/Screenshot-3.png" width="30%"></img> <img src="https://i.postimg.cc/bJ5dkHzR/Screenshot-4.png" width="30%"></img> <img src="https://i.postimg.cc/3NDNB4NQ/Screenshot-5.png" width="30%"></img>
 
 ## Getting Started
 
