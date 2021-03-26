@@ -9,7 +9,7 @@
 ###### To run the application you need:
 - .NET Core 5.0 
 
-- If you don't have *Sql server* on your machine you should replace the configuration in *Quizaldo.Web/appsettings.json* with this code:
+- If you don't have *Sql server* on your machine you should replace the configuration in *EuCars.Web/appsettings.json* with this code:
 ```
 {
   "ConnectionStrings": {
