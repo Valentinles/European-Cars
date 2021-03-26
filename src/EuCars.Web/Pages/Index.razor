@@ -1,0 +1,12 @@
+﻿@page "/"
+@inject IAdvertisementService AdvertisementService
+<AdvertisementListing Advertisements="ads" EmptyResult="No advertisements added."> </AdvertisementListing>
+@code {
+    List<Advertisement> ads;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ads = await this.AdvertisementService.GetAll();
+        base.OnInitialized();
+    }
+}

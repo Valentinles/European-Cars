@@ -1,0 +1,206 @@
+﻿@page "/createAdvertisement"
+@attribute [Authorize]
+@inject NavigationManager NavManager
+@inject IAdvertisementService AdvertisementService
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor httpContextAccessor
+
+<style>
+    .file-input-zone input[type=file] {
+        position: fixed;
+        width: 10%;
+        height: 10%;
+        opacity: 0;
+    }
+</style>
+
+<h3>Create Advertisement</h3>
+<h1 class="text-center">@result</h1>
+<hr />
+<EditForm Model="@ad" OnValidSubmit="InsertAdvertisement" enctype="multipart/form-data">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="row mb-3">
+        <div class="col-3">
+            <label>Brand</label>
+
+            <InputSelect class="custom-select" @bind-Value="ad.Brand">
+                @foreach (var value in Enum.GetValues(typeof(Brand)))
+                {
+                    <option>@value</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="col-3">
+            <label>Model</label>
+            <input type="text" class="form-control" @bind="ad.VehicleModel" />
+        </div>
+        <div class="col-3">
+            <label>Model Year</label>
+            <input type="number" class="form-control" @bind="ad.ModelYear" />
+        </div>
+        <div class="col-3">
+            <label>Category</label>
+            <InputSelect class="custom-select" @bind-Value="ad.Category">
+                @foreach (var value in Enum.GetValues(typeof(Category)))
+                {
+                    <option>@value</option>
+                }
+            </InputSelect>
+        </div>
+    </div>
+    <hr />
+    <div class="row mb-3">
+        <div class="col-3">
+            <label>Engine Type</label>
+            <InputSelect class="custom-select" @bind-Value="ad.EngineType">
+                @foreach (var value in Enum.GetValues(typeof(Engine)))
+                {
+                    <option>@value</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="col-3">
+            <label>Transmission</label>
+            <InputSelect class="custom-select" @bind-Value="ad.Transmission">
+                @foreach (var value in Enum.GetValues(typeof(Transmission)))
+                {
+                    <option>@value</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="col-3">
+            <label>Horse Power (HP) </label>
+            <input type="number" class="form-control" @bind="@ad.HorsePower" />
+        </div>
+        <div class="col-3">
+            <label>Kilowats </label>
+            <input disabled type="number" class="form-control" @bind="@ad.Kilowatts" />
+        </div>
+    </div>
+    <hr />
+    <div class="row mb-3">
+        <div class="col-3">
+            <label>Euro Standart</label>
+            <InputSelect class="custom-select" @bind-Value="ad.EuroStandart">
+                @foreach (var value in Enum.GetValues(typeof(EuroStandart)))
+                {
+                    <option>@value</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="col-3">
+            <label>Condition</label>
+            <InputSelect class="custom-select" @bind-Value="ad.Condition">
+                @foreach (var value in Enum.GetValues(typeof(Condition)))
+                {
+                    <option>@value</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="col-3">
+            <label>Kilometers </label>
+            <input type="number" class="form-control" @bind="ad.Kilometers" />
+        </div>
+        <div class="col-3">
+            <label>Location of the car</label>
+            <InputSelect class="custom-select" @bind-Value="ad.Location">
+                @foreach (var value in Enum.GetValues(typeof(Country)))
+                {
+                    <option>@value</option>
+                }
+            </InputSelect>
+        </div>
+    </div>
+    <hr />
+    <div class="row mb-3">
+        <div class="col-3">
+            <label>Price (in Euros)</label>
+            <input type="number" class="form-control" @bind="ad.Price" />
+        </div>
+        <div class="col-3">
+            <label>Color </label>
+            <input type="text" class="form-control" @bind="ad.Color" />
+        </div>
+        <div class="col-6">
+            <label>Description </label>
+            <textarea class="form-control" rows="3" placeholder="More detailed infomration about car, the exact location..." @bind="ad.Description"></textarea>
+        </div>
+    </div>
+    <div class="row mb-3 file-input-zone btn btn-dark">
+        <BlazorInputFile.InputFile multiple OnChange="HandleFileSelected">
+        </BlazorInputFile.InputFile>
+        Upload Images
+    </div>
+    <div class="row">
+        @if (ad.Images.Count() > 0)
+        {
+            foreach (var img in ad.Images)
+            {
+                <div style="width: 7rem;">
+                    <img src="@img.ImageContent" class="card-img-top" alt="..." style="border-radius: 10%">
+                </div>
+            }
+        }
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <input type="submit" class="btn btn-dark text-center" value="Create Advertisement" />
+            </div>
+        </div>
+    </div>
+</EditForm>
+@code {
+    string result;
+    string userName;
+
+    IFileListEntry[] files;
+    async Task HandleFileSelected(IFileListEntry[] files)
+    {
+        if (files.Length > 10 || files.Length < 1)
+        {
+            result = "Please upload between 1 and 10 images of the car.";
+        }
+        else
+        {
+            result = String.Empty;
+            foreach (var file in files)
+            {
+                var reader = new System.IO.StreamReader(file.Data);
+
+                var ms = new MemoryStream();
+                await file.Data.CopyToAsync(ms);
+                string imageBase64Data = Convert.ToBase64String(ms.ToArray());
+
+                Image img = new Image();
+                img.AdvertisementId = ad.Id;
+                img.ImageContent = string.Format("data:image/png;base64,{0}", imageBase64Data);
+                ad.Images.Add(img);
+            }
+        }
+
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        userName = httpContextAccessor.HttpContext.User.Identity.Name;
+        return base.OnInitializedAsync();
+
+    }
+
+    Advertisement ad = new Advertisement() { CreatedOn = DateTime.Now };
+
+    async Task InsertAdvertisement()
+    {
+        if (await this.AdvertisementService.CreateAdvertisement(ad, userName))
+        {
+            result = "The advertisement has been created successfully.";
+        }
+        else
+        {
+            result = "Error";
+        }
+    }
+
+}

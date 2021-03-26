@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20210311091428_IdentityTablesCreate.cs" />
+    <Compile Remove="Migrations\20210311091428_IdentityTablesCreate.Designer.cs" />
+    <Compile Remove="Migrations\20210317082243_test.cs" />
+    <Compile Remove="Migrations\20210317082243_test.Designer.cs" />
+    <Compile Remove="Migrations\20210318084114_AdAndImgTableSchemaCreate.cs" />
+    <Compile Remove="Migrations\20210318084114_AdAndImgTableSchemaCreate.Designer.cs" />
+    <Compile Remove="Migrations\20210318090648_UnnecessaryPropRemoved.cs" />
+    <Compile Remove="Migrations\20210318090648_UnnecessaryPropRemoved.Designer.cs" />
+    <Compile Remove="Migrations\20210318102204_ImagesTableCreate.cs" />
+    <Compile Remove="Migrations\20210318102204_ImagesTableCreate.Designer.cs" />
+    <Compile Remove="Migrations\20210318102453_AdTableCreate.cs" />
+    <Compile Remove="Migrations\20210318102453_AdTableCreate.Designer.cs" />
+    <Compile Remove="Migrations\20210318102642_AppSchemaCreate.cs" />
+    <Compile Remove="Migrations\20210318102642_AppSchemaCreate.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.13">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EuCars.Shared\EuCars.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

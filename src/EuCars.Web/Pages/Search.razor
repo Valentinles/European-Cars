@@ -1,0 +1,120 @@
+﻿@page "/search"
+@inject IAdvertisementService AdvertisementService
+
+<EditForm Model="@ad" OnValidSubmit="GetSearchResults">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="row mb-3">
+        <div class="col-3">
+            <label>Brand</label>
+
+            <InputSelect class="custom-select" @bind-Value="ad.Brand">
+                @foreach (var value in Enum.GetValues(typeof(Brand)))
+                {
+                    <option>@value</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="col-3">
+            <label>Model</label>
+            <input type="text" class="form-control" @bind="ad.VehicleModel" />
+        </div>
+        <div class="col-3">
+            <label>Model Year From</label>
+            <InputSelect class="custom-select" @bind-Value="ad.ModelYearFrom">
+                @for (int i = 1950; i <= 2021; i++)
+                {
+                    <option>@i</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="col-3">
+            <label>Model Year To</label>
+            <InputSelect class="custom-select" @bind-Value="ad.ModelYearTo">
+                @for (int i = 1950; i <= 2021; i++)
+                {
+                    <option>@i</option>
+                }
+            </InputSelect>
+        </div>
+    </div>
+    <hr />
+    <div class="row mb-3">
+        <div class="col-3">
+            <label>Category</label>
+            <InputSelect class="custom-select" @bind-Value="ad.Category">
+                @foreach (var value in Enum.GetValues(typeof(Category)))
+                {
+                    <option>@value</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="col-3">
+            <label>Engine Type</label>
+            <InputSelect class="custom-select" @bind-Value="ad.EngineType">
+                @foreach (var value in Enum.GetValues(typeof(Engine)))
+                {
+                    <option>@value</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="col-3">
+            <label>Transmission</label>
+            <InputSelect class="custom-select" @bind-Value="ad.Transmission">
+                @foreach (var value in Enum.GetValues(typeof(Transmission)))
+                {
+                    <option>@value</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="col-3">
+            <label>Location of the car</label>
+            <InputSelect class="custom-select" @bind-Value="ad.Location">
+                @foreach (var value in Enum.GetValues(typeof(Country)))
+                {
+                    <option>@value</option>
+                }
+            </InputSelect>
+        </div>
+    </div>
+    <hr />
+    <div class="row mb-3">
+        <div class="col-3">
+            <label>Horse Power (HP) from </label>
+            <input type="number" class="form-control" min="1" max="1000" @bind="@ad.HorsePowerFrom" />
+        </div>
+        <div class="col-3">
+            <label>Horse Power (HP) to </label>
+            <input type="number" class="form-control" min="1" max="1000" @bind="@ad.HorsePowerTo" />
+        </div>
+        <div class="col-3">
+            <label>Price (in Euros) mininum</label>
+            <input type="number" class="form-control" @bind="@ad.PriceFrom" />
+        </div>
+        <div class="col-3">
+            <label>Price (in Euros) maximum</label>
+            <input type="number" class="form-control" @bind="@ad.PriceTo" />
+        </div>
+    </div>
+    <hr />
+    <div class="container">
+        <div class="row mx-auto">
+            <div class="col text-center">
+                <input type="submit" class="btn btn-dark text-center" value="Search" />
+            </div>
+        </div>
+    </div>
+</EditForm>
+<AdvertisementListing Advertisements="searchResults" EmptyResult="No searches found."></AdvertisementListing>
+
+
+@code {
+    List<Advertisement> searchResults;
+    AdvertisementSearchModel ad = new AdvertisementSearchModel();
+
+    async Task GetSearchResults()
+    {
+        searchResults = this.AdvertisementService.Search(ad);
+    }
+
+}

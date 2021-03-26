@@ -1,0 +1,108 @@
+﻿@inject IAdvertisementService AdvertisementService
+@inject NavigationManager NavManager
+
+    <style>
+        .modal {
+            overflow: auto !important;
+        }
+    </style>
+    <div class="row mx-auto mb-5">
+        <div class="col-md-4 card-holder mt-4">
+            <div class="card h-100 border-dark mb-3" style="max-width: 18rem;">
+                <div class="card-header">Description</div>
+                <div class="card-body text-dark">
+                    <p class="card-text">@ad.Description</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 card-holder mt-4">
+            <div class="card h-100 border-dark mb-3" style="max-width: 18rem;">
+                <div class="card-header">Contact</div>
+                <div class="card-body text-dark">
+                    <h5 class="card-title">@ad.User.Name</h5>
+                    <p class="card-text">@ad.User.PhoneNumber</p>
+                    <p class="card-text">@ad.Location</p>
+                    <p class="card-text text-muted">@ad.CreatedOn.ToString("dddd, dd MMMM yyyy")</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mt-4">
+            <img src="@ad.Images.FirstOrDefault().ImageContent" alt="Alternate Text" width="350" />
+        </div>
+    </div>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Brand</th>
+                <th scope="col">Model</th>
+                <th scope="col">Year</th>
+                <th scope="col">Engine Type</th>
+                <th scope="col">Condition</th>
+                <th scope="col">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">@ad.Brand</th>
+                <td>@ad.VehicleModel</td>
+                <td>@ad.ModelYear</td>
+                <td>@ad.EngineType</td>
+                <td>@ad.Condition</td>
+                <td>@ad.Price euro</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Category</th>
+                <th scope="col">Transmission</th>
+                <th scope="col">Horse Power (HP)</th>
+                <th scope="col">Kilowats</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">@ad.Category</th>
+                <td>@ad.Transmission</td>
+                <td>@ad.HorsePower</td>
+                <td>@ad.Kilowatts</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Kilometers</th>
+                <th scope="col">Euro Standart</th>
+                <th scope="col">Color</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">@ad.Kilometers km</th>
+                <td>@ad.EuroStandart</td>
+                <td>@ad.Color</td>
+            </tr>
+        </tbody>
+    </table>
+<ImagesListing Id="ad.Id"></ImagesListing>
+
+    @code {
+
+        [Parameter]
+        public int Id { get; set; }
+
+        Advertisement ad;
+
+        protected override Task OnParametersSetAsync()
+        {
+            ad = this.AdvertisementService.GetById(Id);
+            if (ad == null)
+            {
+                NavManager.NavigateTo("/");
+            }
+            return base.OnParametersSetAsync();
+        }
+    }

@@ -1,0 +1,73 @@
+﻿@using EuCars.Common
+<style>
+    .card:hover {
+        box-shadow: 0 0 15px rgba(33,33,33,.2);
+    }
+    body {
+        overflow: @currentOverflow;
+    }
+</style>
+@if (Advertisements == null || Advertisements.Count() == 0)
+{
+    <p>@EmptyResult</p>
+}
+else
+{
+    <div class="row mx-auto mb-5">
+        <Virtualize Items="@Advertisements">
+            <Car @key="context.Id" />
+            <div class="col-md-3 card-holder mt-4">
+                <div class="card h-100">
+                    <a href="" data-toggle="modal" @onclick="ChangeOverflowToHidden" data-target="#adModal@(context.Id)">
+                        <img src="@context.Images.FirstOrDefault().ImageContent" class="card-img-top" style="width: 100%; height: 12vw; object-fit: cover;" alt="No Image" width="300">
+                    </a>
+                    <div class="card-body">
+                        <h4 class="card-title">@context.Brand.GetDisplayName() @context.VehicleModel</h4>
+                        <p class="card-text"><i class="bi bi-info-circle-fill"></i> @context.ModelYear, @context.EngineType, @context.Condition</p>
+                        <p><i class="bi bi-cash"></i> @context.Price euro</p>
+                        <p class="card-text"><i class="bi bi-geo-alt-fill"></i> @context.Location</p>
+                    </div>
+                    <div class="card-footer">
+                        <p class="card-text"><small class="text-muted">Created on @context.CreatedOn.ToString("dddd, dd MMMM yyyy")</small></p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="adModal@(context.Id)" role="dialog">
+                <div class="modal-dialog modal-dialog-centered modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">@context.Brand.GetDisplayName() @context.VehicleModel</h5>
+                            <button type="button" class="close" @onclick="ChangeOverflowToAuto" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body mx-auto">
+                            <Details Id="@context.Id"></Details>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </Virtualize>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public List<Advertisement> Advertisements { get; set; } = new List<Advertisement>();
+
+    [Parameter]
+    public string EmptyResult { get; set; }
+
+
+    string currentOverflow;
+
+    private void ChangeOverflowToHidden()
+    {
+        currentOverflow = "hidden !important";
+    }
+    private void ChangeOverflowToAuto()
+    {
+        currentOverflow = "auto !important";
+    }
+
+}

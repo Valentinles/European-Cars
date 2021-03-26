@@ -1,0 +1,41 @@
+﻿@inject IAdvertisementService AdvertisementService
+@using Common 
+<div class="row">
+    @foreach (var image in ad.Images)
+    {
+        <div class="col mb-4">
+            <div class="text-center">
+                <a href="" data-toggle="modal" data-target="#staticBackdrop@(image.Id)">
+                    <img src="@image.ImageContent" class="rounded tImage" alt="..." style="width: 100%; height: 12vw; object-fit: cover;">
+                </a>
+            </div>
+        </div>
+        <div class="modal fade" id="staticBackdrop@(image.Id)" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">@ad.Brand.GetDisplayName() @ad.VehicleModel</h5>
+                    </div>
+                    <div class="modal-body mx-auto">
+                        <img src="@image.ImageContent" class="img-fluid rounded" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark" onclick="$('#staticBackdrop@(image.Id)').modal('hide');">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    Advertisement ad;
+
+    protected override Task OnInitializedAsync()
+    {
+        ad = this.AdvertisementService.GetById(Id);
+        return base.OnInitializedAsync();
+    }
+}
